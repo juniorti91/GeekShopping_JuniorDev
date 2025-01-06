@@ -14,7 +14,16 @@ builder.Services.AddDbContext<MySQLContext>(options => options.
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // Configurações básicas
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Product API",
+        Version = "v1",
+        Description = "Documentação da API Product"
+    });
+});
 
 var app = builder.Build();
 
