@@ -1,27 +1,38 @@
+using AutoMapper;
+using GeekShopping.ProductAPI.Config;
 using GeekShopping.ProductAPI.Model.Context;
+using GeekShopping.ProductAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-// ConfiguraÁ„o com o banco de dados
+// Configura√ß√£o com o banco de dados
 var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
 builder.Services.AddDbContext<MySQLContext>(options => options.
             UseMySql(connection, 
                     new MySqlServerVersion(
                         new Version(8, 0, 32))));
 
+// Configura√ß√£o do AutoMapper
+var mappingConfig = MappingConfig.RegisterMaps();
+IMapper mapper = mappingConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
+// COnfigurando a Inje√ß√£o de Depend√™ncia
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    // ConfiguraÁıes b·sicas
+    // Configura√ß√µes b√°sicas
     options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
         Title = "Product API",
         Version = "v1",
-        Description = "DocumentaÁ„o da API Product"
+        Description = "Documenta√ß√£o da API Product"
     });
 });
 

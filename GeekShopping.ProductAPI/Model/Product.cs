@@ -10,7 +10,7 @@ namespace GeekShopping.ProductAPI.Model
         [Column("name")]
         [Required]
         [StringLength(150)]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [Column("price")]
         [Required]
