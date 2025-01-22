@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using GeekShopping.ProductAPI.Data.ValueObjects;
 using GeekShopping.ProductAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace GeekShopping.ProductAPI.Controllers
 {
@@ -41,12 +35,54 @@ namespace GeekShopping.ProductAPI.Controllers
             try
             {
                 var product = await _repository.FindById(id);
-                if (product == null)
+                if (product.Id <= 0)
                 {
                     return NotFound();
                 }
 
                 return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ProductVO>> Create(ProductVO vo)
+        {
+            try
+            {
+                var product = await _repository.Create(vo);
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<ProductVO>> Update(ProductVO vo)
+        {
+            try
+            {
+                var product = await _repository.Update(vo);
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(long id)
+        {
+            try
+            {
+                await _repository.Delete(id);
+                return Ok();
             }
             catch (Exception ex)
             {
