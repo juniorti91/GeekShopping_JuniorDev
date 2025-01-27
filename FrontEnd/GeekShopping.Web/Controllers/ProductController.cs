@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using GeekShopping.Web.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace GeekShopping.Web.Controllers
 {
@@ -21,7 +15,7 @@ namespace GeekShopping.Web.Controllers
 
         public async Task<IActionResult> ProductIndex()
         {
-            var products = _productService.FindAllProducts();
+            var products = await _productService.FindAllProducts();
             return View(products);
         }
     }
