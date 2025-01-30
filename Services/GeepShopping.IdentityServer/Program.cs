@@ -3,6 +3,7 @@ using GeepShopping.IdentityServer.Model.Context;
 using Microsoft.AspNetCore.Identity;
 using GeepShopping.IdentityServer.Model;
 using GeepShopping.IdentityServer.Configuration;
+using GeepShopping.IdentityServer.Initializer;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,7 +38,11 @@ builder.Services.AddIdentityServer(options =>
         .AddAspNetIdentity<ApplicationUser>()
         .AddDeveloperSigningCredential();
 
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
+
 var app = builder.Build();
+
+var dbInitializeService = app.Services.CreateScope().ServiceProvider.GetService<IDbInitializer>();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -55,6 +60,8 @@ app.UseRouting();
 app.UseIdentityServer();
 
 app.UseAuthorization();
+
+dbInitializeService.Initialize();
 
 app.MapControllerRoute(
     name: "default",
