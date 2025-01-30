@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using GeepShopping.IdentityServer.Model.Context; // Namespace do MySQLContext
+using GeepShopping.IdentityServer.Model.Context;
 using Microsoft.AspNetCore.Identity;
 using GeepShopping.IdentityServer.Model;
 using GeepShopping.IdentityServer.Configuration;
@@ -25,21 +25,17 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 builder.Services.AddIdentityServer(options => 
 {
     options.Events.RaiseErrorEvents = true;
+    options.Events.RaiseErrorEvents = true;
     options.Events.RaiseInformationEvents = true;
     options.Events.RaiseFailureEvents = true;
     options.Events.RaiseSuccessEvents = true;
     options.EmitStaticAudienceClaim = true;
-}).AddInMemoryIdentityResources(IdentityConfiguration.IdentityResources)
+})
+        .AddInMemoryIdentityResources(IdentityConfiguration.IdentityResources)
+        .AddInMemoryApiScopes(IdentityConfiguration.ApiScopes)
         .AddInMemoryClients(IdentityConfiguration.Clients)
-        .AddAspNetIdentity<ApplicationUser>();
-
-var identityServerBuilder = builder.Services.AddIdentityServer(options =>
-{
-    options.EmitStaticAudienceClaim = true;
-});
-
-// Adiciona a credencial de desenvolvimento para assinar tokens (apenas em desenvolvimento)
-identityServerBuilder.AddDeveloperSigningCredential();
+        .AddAspNetIdentity<ApplicationUser>()
+        .AddDeveloperSigningCredential();
 
 var app = builder.Build();
 
@@ -47,11 +43,11 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
