@@ -1,16 +1,13 @@
-using System.Collections;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Duende.IdentityServer;
+using Duende.IdentityServer.Models;  // Necessário para IdentityResource, ApiScope e Client
+
 
 namespace GeepShopping.IdentityServer.Configuration
 {
     public static class IdentityConfiguration
     {
-        public const string Admin = 'Admin';
-        public const string Customer = 'Customer';
+        public const string Admin = "Admin";
+        public const string Customer = "Customer";
         
         public static IEnumerable<IdentityResource> IdentityResources =>
             new List<IdentityResource>
