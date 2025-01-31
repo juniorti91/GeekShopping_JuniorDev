@@ -1,5 +1,7 @@
 using GeekShopping.Web.Models;
 using GeekShopping.Web.Services.IServices;
+using GeekShopping.Web.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GeekShopping.Web.Controllers
@@ -11,9 +13,10 @@ namespace GeekShopping.Web.Controllers
 
         public ProductController(IProductService productService)
         {
-            _productService = productService;
+            _productService = productService ?? throw new ArgumentNullException(nameof(productService));
         }
 
+        [Authorize]
         [HttpGet("Index")]
         public async Task<IActionResult> ProductIndex()
         {
@@ -21,12 +24,14 @@ namespace GeekShopping.Web.Controllers
             return View(products);
         }
         
+        [Authorize]
         [HttpGet("Create")]
         public async Task<IActionResult> ProductCreate()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost("Create")]
         public async Task<IActionResult> ProductCreate(ProductModel model)
         {
@@ -42,6 +47,7 @@ namespace GeekShopping.Web.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpGet("Update")]
         public async Task<IActionResult> ProductUpdate(int id)
         {
@@ -53,6 +59,7 @@ namespace GeekShopping.Web.Controllers
             return NotFound();            
         }
 
+        [Authorize]
         [HttpPost("Update")]
         public async Task<IActionResult> ProductUpdate(ProductModel model)
         {
@@ -68,6 +75,7 @@ namespace GeekShopping.Web.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpGet("Delete")]
         public async Task<IActionResult> ProductDelete(int id)
         {
@@ -80,6 +88,7 @@ namespace GeekShopping.Web.Controllers
         }
 
         [HttpPost("Delete")]
+        [Authorize(Roles = Role.Admin)]
         public async Task<IActionResult> ProductDelete(ProductModel model)
         {
             var response = await _productService.DeleteProductById(model.Id);
