@@ -30,7 +30,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 // Adicionando configurações de Segurança de Autenticação
 builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer(option => 
+    .AddJwtBearer("Bearer", option => 
     {
         option.Authority = "https://localhost:4435/";
         option.TokenValidationParameters = new TokenValidationParameters
