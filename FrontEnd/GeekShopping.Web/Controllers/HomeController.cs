@@ -10,15 +10,15 @@ namespace GeekShopping.Web.Controllers
             return View();
         }
 
-        public IActionResult Logout()
-        {
-            return SignOut("Cookies", "oidc");
-        }
-
         [Authorize]
         public async Task<IActionResult> Login()
         {
             return await Task.Run(() => RedirectToAction(nameof(Index)));
+        }
+        
+        public IActionResult Logout()
+        {
+            return SignOut("Cookies", "oidc");
         }
     }
 }
